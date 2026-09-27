@@ -1,7 +1,7 @@
-import Link from "next/link";
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionaries";
 import { href } from "@/lib/i18n";
+import { BrandLink } from "./BrandLink";
 import { LocaleSwitch } from "./LocaleSwitch";
 import { MobileMenu } from "./MobileMenu";
 import { NavLinks, type NavItem } from "./NavLinks";
@@ -19,12 +19,12 @@ export function Header({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   return (
     <header className={styles.header}>
       <div className={`container ${styles.inner}`}>
-        <Link href={href(locale)} className={styles.brand} aria-label={dict.a11y.home}>
+        <BrandLink href={href(locale)} className={styles.brand} label={dict.a11y.home}>
           <span className={styles.mark} aria-hidden="true" lang="ja">
             戦
           </span>
           <span className={styles.name}>Camilo Castro</span>
-        </Link>
+        </BrandLink>
         <NavLinks locale={locale} items={items} label={dict.a11y.primaryNav} />
         <div className={styles.controls}>
           <LocaleSwitch locale={locale} label={dict.a11y.language} />

@@ -77,6 +77,7 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[la
   return (
     <html
       lang={lang}
+      data-scroll-behavior="smooth"
       className={`${archivo.variable} ${plexSans.variable} ${plexMono.variable} ${dela.variable}`}
       suppressHydrationWarning
     >
