@@ -11,9 +11,11 @@ import { RevealObserver } from "@/components/RevealObserver";
 import { site } from "@/lib/site";
 import "../globals.css";
 
-const archivo = Archivo({ subsets: ["latin", "latin-ext"], axes: ["wdth"], variable: "--font-archivo", display: "swap" });
-const plexSans = IBM_Plex_Sans({ subsets: ["latin", "latin-ext"], axes: ["wdth"], variable: "--font-plex", display: "swap" });
-const plexMono = IBM_Plex_Mono({ subsets: ["latin", "latin-ext"], weight: ["400", "500"], variable: "--font-plex-mono", display: "swap" });
+/* Latin covers both languages (á é í ó ú ñ ¿ ¡). Only what the design uses is loaded:
+   Archivo with its width axis, Plex Sans' weight axis, one Plex Mono weight. */
+const archivo = Archivo({ subsets: ["latin"], axes: ["wdth"], variable: "--font-archivo", display: "swap" });
+const plexSans = IBM_Plex_Sans({ subsets: ["latin"], variable: "--font-plex", display: "swap" });
+const plexMono = IBM_Plex_Mono({ subsets: ["latin"], weight: "400", variable: "--font-plex-mono", display: "swap" });
 /* Dela Gothic One, subset to the handful of Japanese glyphs used as ornaments (≈3 KB). */
 const dela = localFont({ src: "../../fonts/dela-gothic-one-subset.woff2", variable: "--font-dela", display: "block", preload: true });
 
