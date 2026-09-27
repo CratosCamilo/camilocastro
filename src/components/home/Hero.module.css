@@ -60,7 +60,7 @@
   position: relative;
   display: grid;
   grid-template-rows: auto 1fr auto;
-  gap: clamp(18px, 3vw, 36px);
+  gap: clamp(16px, 2.2vw, 30px);
   padding-block: clamp(18px, 2.4vw, 30px) clamp(26px, 3.6vw, 44px);
 }
 
@@ -77,29 +77,104 @@
   color: var(--ink-3);
 }
 
-.stage {
+/* ---- the cover page: art panel on top, name below, one slanted gutter ---- */
+
+.page {
+  --art-h: clamp(160px, 31svh, 400px);
+  --cut: clamp(14px, 2.4vw, 36px);
+  --frame: 3px;
+  /* the container's content width, so the name can be sized to fit one line */
+  --cw: calc(min(100vw, var(--maxw)) - 2 * var(--gutter));
   position: relative;
-  display: flex;
-  align-items: center;
-  gap: clamp(12px, 3vw, 48px);
+  display: grid;
+  gap: clamp(12px, 1.8vw, 24px);
   align-self: center;
 }
 
+/* The frame is ink showing around an inset picture, so the border follows the slant. */
+.art {
+  position: relative;
+  height: var(--art-h);
+  background: var(--line);
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--cut)), 0 100%);
+}
+
+.artInner {
+  position: absolute;
+  inset: var(--frame);
+  overflow: hidden;
+  background: #121110;
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--cut)), 0 100%);
+}
+
+/* Prints in with halftone dots that grow until they fill; never fully hidden, so it
+   paints (and counts for LCP) on the first frame. The mask is dropped afterwards. */
+.artImg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 42%;
+  transform: translate3d(calc(var(--mx) * -12px), calc(var(--my) * -8px), 0) scale(1.06);
+  transition: transform 0.9s var(--ease-out);
+  -webkit-mask-image: radial-gradient(circle at center, #000 var(--ht), transparent calc(var(--ht) + 0.8px));
+  mask-image: radial-gradient(circle at center, #000 var(--ht), transparent calc(var(--ht) + 0.8px));
+  -webkit-mask-size: 7px 7px;
+  mask-size: 7px 7px;
+  animation:
+    art-print 1.2s var(--ease-out) 0.05s both,
+    unmask 0s linear 1.3s forwards;
+}
+
+@keyframes art-print {
+  from {
+    --ht: 1.4px;
+  }
+  to {
+    --ht: 6px;
+  }
+}
+
+@keyframes unmask {
+  to {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+}
+
+.caption {
+  position: absolute;
+  left: calc(var(--frame) + clamp(10px, 1.4vw, 18px));
+  top: calc(var(--frame) + clamp(10px, 1.4vw, 18px));
+  padding: 7px 12px 6px;
+  background: var(--paper);
+  color: var(--ink);
+  border: 2px solid var(--line);
+  font-size: 0.6875rem;
+  line-height: 1.2;
+  animation: fade 0.8s var(--ease-out) 0.5s both;
+}
+
 .name {
-  flex: 0 1 auto;
   font-family: var(--font-display);
   font-weight: 900;
   font-stretch: 62%;
-  /* as wide as the page allows, but never taller than a third of the screen */
-  font-size: clamp(5.2rem, min(24.5vw, 33svh), 23rem);
+  /* "CAMILO CASTRO" is 6.05em wide: take 84% of the container, leave the rest to the seal */
+  font-size: min(calc(var(--cw) * 0.84 / 6.05), 21svh);
   line-height: 0.8;
   letter-spacing: -0.012em;
   text-transform: uppercase;
-  text-wrap: nowrap;
+  white-space: nowrap;
+}
+
+.name :global(.line) {
+  display: inline-block;
+  vertical-align: top;
 }
 
 /* The name rises the last third of the way into place. It is never fully hidden,
-   so the browser can paint it — and count it as LCP — on the very first frame. */
+   so the browser can paint it on the very first frame. */
 .name :global(.line__inner) {
   animation: line-up 1s var(--ease-out) both;
 }
@@ -121,16 +196,19 @@
   }
 }
 
+/* The seal is stamped across the gutter, over both panels. */
 .sealWrap {
-  flex: none;
-  transform: translate3d(calc(var(--mx) * 7px), calc(var(--my) * 6px), 0);
+  position: absolute;
+  z-index: 2;
+  right: clamp(8px, 3.4vw, 56px);
+  top: calc(var(--art-h) - var(--cut) * 0.55);
+  transform: translate3d(calc(var(--mx) * 7px), calc(-50% + var(--my) * 6px), 0);
   transition: transform 0.9s var(--ease-out);
 }
 
 .seal {
-  font-size: clamp(3.4rem, 8.4vw, 8rem);
+  font-size: clamp(2.6rem, 6vw, 5.6rem);
   rotate: -6deg;
-  box-shadow: 0 0 0 0 transparent;
   animation: stamp 0.62s var(--ease-stamp) 0.62s both;
 }
 
@@ -230,6 +308,13 @@
   }
 }
 
+/* tall tablets: give the art panel the room the screen has */
+@media (max-width: 1100px) and (min-width: 701px) and (orientation: portrait) {
+  .page {
+    --art-h: min(calc(var(--cw) / 1.9), 40svh);
+  }
+}
+
 /* ---- phones ---- */
 
 @media (max-width: 700px) {
@@ -258,24 +343,35 @@
     display: none;
   }
 
-  .stage {
-    display: block;
-    padding-block: clamp(28px, 9vw, 56px) 18px;
+  .page {
+    --art-h: calc((100vw - 2 * var(--gutter)) / 2.3);
+    --cut: 12px;
+    --frame: 2px;
+    gap: 14px;
+    padding-block: 6px 10px;
   }
 
+  .caption {
+    font-size: 0.625rem;
+    padding: 5px 8px 4px;
+  }
+
+  /* two stacked lines on phones */
   .name {
-    font-size: min(25.5vw, 8.6rem);
+    font-size: min(24vw, 8.6rem);
   }
 
-  /* on phones the seal is stamped over the corner of the name */
+  .name :global(.line) {
+    display: block;
+  }
+
   .sealWrap {
-    position: absolute;
-    right: -4px;
-    bottom: -2px;
+    right: 6px;
+    top: calc(var(--art-h) - 6px);
   }
 
   .seal {
-    font-size: clamp(1.9rem, 9vw, 2.8rem);
+    font-size: clamp(1.9rem, 9vw, 2.6rem);
   }
 
   .bottom {

@@ -21,6 +21,10 @@ the single word on Camilo's GitHub profile.
   condensed headlines; hover states widen type instead of recoloring it. IBM Plex Sans
   and Plex Mono carry text and metadata. Dela Gothic One is subset to the ~20 Japanese
   glyphs used as ornaments (≈4 KB).
+- **A cover, not a banner.** The hero is one manga page: the art panel (a duotone
+  in the site's ink and paper, the same file for both themes) on top, the name below,
+  split by a slanted gutter with the seal stamped across the join. The social card
+  uses the same composition.
 - **Projects as manga pages.** Real screenshots sit in bordered panels with gutters;
   one row breaks the grid with a slanted gutter.
 - **Motion with a reason.** Screenshots *print in* — halftone dots grow while a soft

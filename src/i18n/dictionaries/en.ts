@@ -39,6 +39,7 @@ export const en = {
     ctaWork: "See the work",
     ctaContact: "Write to me",
     mottoLabel: "Motto: 戦え, tatakae — “fight”",
+    prologue: "Prologue",
     scroll: "Scroll",
   },
   chapter: "Chapter",
@@ -180,7 +181,7 @@ export type DictionaryShape = {
   hero: {
     role: string; place: string; line1: string; line2: string; lede: string;
     facts: readonly { term: string; detail: string }[];
-    ctaWork: string; ctaContact: string; mottoLabel: string; scroll: string;
+    ctaWork: string; ctaContact: string; mottoLabel: string; prologue: string; scroll: string;
   };
   chapter: string;
   work: Record<"title" | "lede" | "caseStudy" | "visit" | "source" | "private" | "role" | "stack" | "client" | "year" | "of", string>;

@@ -1,16 +1,22 @@
+import Image from "next/image";
 import type { Dictionary } from "@/i18n/dictionaries";
 import { Seal } from "@/components/Seal";
+import prologue from "@/content/art/prologue.webp";
 import { FocusLines } from "./FocusLines";
 import { HeroParallax } from "./HeroParallax";
 import styles from "./Hero.module.css";
 
+/**
+ * The cover is one manga page: the art panel on top, the name below, split by a
+ * slanted gutter with the 戦え seal stamped across the join.
+ */
 export function Hero({ dict }: { dict: Dictionary }) {
   const h = dict.hero;
   return (
     <section id="top" className={styles.hero} aria-labelledby="hero-title">
       <div className={styles.lines} aria-hidden="true">
-        <FocusLines className={styles.linesWide} width={1600} height={1000} cx={1190} cy={440} />
-        <FocusLines className={styles.linesNarrow} width={800} height={1400} cx={590} cy={560} count={120} clear={[150, 300]} seed={77} />
+        <FocusLines className={styles.linesWide} width={1600} height={1000} cx={1400} cy={470} />
+        <FocusLines className={styles.linesNarrow} width={800} height={1400} cx={690} cy={430} count={120} clear={[130, 260]} seed={77} />
       </div>
       <div className={`tone ${styles.tone}`} aria-hidden="true" />
 
@@ -24,15 +30,31 @@ export function Hero({ dict }: { dict: Dictionary }) {
           </p>
         </div>
 
-        <div className={styles.stage}>
+        <div className={styles.page}>
+          <div className={styles.art} aria-hidden="true">
+            <div className={styles.artInner}>
+              <Image
+                src={prologue}
+                alt=""
+                className={styles.artImg}
+                placeholder="blur"
+                loading="eager"
+                fetchPriority="high"
+                sizes="(max-width: 1480px) 94vw, 1392px"
+              />
+            </div>
+            <span className={`mono ${styles.caption}`}>{h.prologue}</span>
+          </div>
+
           <h1 id="hero-title" className={styles.name}>
             <span className="line">
               <span className={`line__inner ${styles.l1}`}>{h.line1}</span>
-            </span>
+            </span>{" "}
             <span className="line">
               <span className={`line__inner ${styles.l2}`}>{h.line2}</span>
             </span>
           </h1>
+
           <div className={styles.sealWrap}>
             <Seal className={styles.seal} />
             <span className="visually-hidden">{h.mottoLabel}</span>

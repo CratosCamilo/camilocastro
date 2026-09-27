@@ -41,6 +41,7 @@ export const es = {
     ctaWork: "Ver el trabajo",
     ctaContact: "Escríbeme",
     mottoLabel: "Lema: 戦え, tatakae — «pelea»",
+    prologue: "Prólogo",
     scroll: "Desliza",
   },
   chapter: "Capítulo",
