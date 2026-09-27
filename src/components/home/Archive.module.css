@@ -1,0 +1,114 @@
+.section {
+  padding-top: clamp(112px, 13vw, 200px);
+}
+
+.table {
+  width: 100%;
+  margin-top: clamp(36px, 4vw, 56px);
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+}
+
+.table thead th {
+  padding: 0 16px 12px 0;
+  text-align: left;
+  font-weight: 400;
+  color: var(--ink-3);
+  border-bottom: var(--border) solid var(--line);
+}
+
+.table tbody tr {
+  border-bottom: 1px solid var(--rule);
+  transition: background-color 0.25s;
+}
+
+.table tbody tr:hover {
+  background: var(--paper-2);
+}
+
+.table td,
+.table tbody th {
+  padding: 16px 16px 16px 0;
+  vertical-align: top;
+  text-align: left;
+}
+
+.year {
+  width: 5rem;
+  color: var(--ink-3);
+  padding-left: 4px !important;
+}
+
+.name {
+  width: 16rem;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-stretch: 75%;
+  font-size: 1.25rem;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.what {
+  color: var(--ink-2);
+  max-width: 44ch;
+}
+
+.tech {
+  width: 17rem;
+}
+
+.link {
+  width: 8rem;
+  white-space: nowrap;
+}
+
+@media (max-width: 980px) {
+  .table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+  }
+
+  .table,
+  .table tbody,
+  .table tr,
+  .table td,
+  .table tbody th {
+    display: block;
+    width: auto !important;
+  }
+
+  .table tbody tr {
+    display: grid;
+    grid-template-columns: 4rem minmax(0, 1fr);
+    column-gap: 12px;
+    padding: 16px 0;
+  }
+
+  .table td,
+  .table tbody th {
+    padding: 0 !important;
+  }
+
+  .year {
+    grid-row: 1 / span 4;
+  }
+
+  .name {
+    font-size: 1.125rem;
+  }
+
+  .what,
+  .tech,
+  .link {
+    grid-column: 2;
+    margin-top: 8px;
+  }
+
+  .link[data-empty] {
+    display: none !important;
+  }
+}

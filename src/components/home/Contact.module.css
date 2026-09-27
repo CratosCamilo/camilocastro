@@ -1,0 +1,189 @@
+.section {
+  padding-top: var(--section-space);
+}
+
+/* The page inverts: ink becomes the paper. Works the same in both themes. */
+.panel {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: var(--ink);
+  color: var(--paper);
+  --rule: color-mix(in oklab, var(--paper) 22%, transparent);
+}
+
+.panel ::selection {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.lines {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  color: var(--paper);
+  opacity: 0.08;
+}
+
+.lines svg {
+  width: 100%;
+  height: 100%;
+}
+
+.inner {
+  display: grid;
+  gap: clamp(22px, 3vw, 36px);
+  padding-block: clamp(56px, 8vw, 120px) clamp(56px, 7vw, 104px);
+}
+
+.meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-top: 16px;
+  border-top: 6px solid var(--paper);
+}
+
+.jp {
+  writing-mode: vertical-rl;
+  white-space: nowrap;
+  font-family: var(--font-jp);
+  font-size: clamp(2.4rem, 5.6vw, 5rem);
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1.25px var(--paper);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-stretch: 62%;
+  font-size: clamp(3.4rem, 10vw, 10rem);
+  line-height: 0.86;
+  text-transform: uppercase;
+  max-width: 14ch;
+  margin-top: -0.2em;
+}
+
+.lede {
+  max-width: 46ch;
+  font-size: clamp(1.125rem, 1.6vw, 1.4rem);
+  line-height: 1.45;
+  opacity: 0.86;
+}
+
+.emailRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 22px;
+  padding-block: clamp(10px, 2vw, 24px);
+}
+
+.email {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-stretch: 70%;
+  font-size: clamp(1.8rem, 5.4vw, 5rem);
+  line-height: 1;
+  letter-spacing: -0.005em;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+  background-image: linear-gradient(var(--accent), var(--accent));
+  background-size: 100% 0.08em;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  padding-bottom: 0.08em;
+  transition: color 0.3s, background-size 0.5s var(--ease-out);
+}
+
+.email:hover {
+  color: var(--accent);
+  background-size: 0% 0.08em;
+  background-position: 100% 100%;
+}
+
+.copy {
+  min-height: 44px;
+  padding: 0 18px;
+  border: 1.5px solid var(--paper);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: background-color 0.25s, color 0.25s;
+}
+
+.copy:hover,
+.copy[data-copied] {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.elsewhere {
+  display: grid;
+  gap: 12px;
+  margin-top: clamp(8px, 2vw, 24px);
+}
+
+.socials {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: clamp(16px, 3vw, 40px);
+  margin: 0;
+}
+
+.social {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 4px 12px;
+  padding: 18px 0;
+  text-decoration: none;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+
+.socialName {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-stretch: 75%;
+  font-size: 1.6rem;
+  line-height: 1;
+  text-transform: uppercase;
+  transition: font-stretch 0.45s var(--ease-out), color 0.25s;
+}
+
+.social:hover .socialName {
+  font-stretch: 100%;
+  color: var(--accent);
+}
+
+.socialArrow {
+  grid-column: 2;
+  grid-row: 1;
+  align-self: start;
+  transition: transform 0.35s var(--ease-out);
+}
+
+.social:hover .socialArrow {
+  transform: translate(3px, -3px);
+}
+
+@media (max-width: 700px) {
+  .socials {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .social {
+    border-top: 0;
+  }
+
+  .socials li:first-child .social {
+    border-top: 1px solid var(--rule);
+  }
+
+  .emailRow {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

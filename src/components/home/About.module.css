@@ -1,0 +1,128 @@
+.section {
+  padding-top: var(--section-space);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: clamp(40px, 7vw, 120px);
+  margin-top: clamp(48px, 6vw, 88px);
+}
+
+.side {
+  display: grid;
+  align-content: start;
+  gap: clamp(40px, 5vw, 72px);
+}
+
+.pull {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-stretch: 68%;
+  font-size: clamp(2.3rem, 4.3vw, 4.2rem);
+  line-height: 0.95;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+.motto {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+  padding: 22px;
+  border: var(--border) solid var(--line);
+  position: relative;
+  isolation: isolate;
+}
+
+.motto::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: radial-gradient(circle at center, var(--tone) 1.05px, transparent 1.35px);
+  background-size: 6px 6px;
+  -webkit-mask-image: linear-gradient(135deg, transparent 40%, #000);
+  mask-image: linear-gradient(135deg, transparent 40%, #000);
+}
+
+.seal {
+  font-size: 3.6rem;
+  rotate: -5deg;
+}
+
+.mottoText {
+  display: grid;
+  gap: 6px;
+}
+
+.mottoWord {
+  font-family: var(--font-jp);
+  font-size: 2rem;
+  line-height: 1.1;
+}
+
+.mottoNote {
+  font-size: 0.9875rem;
+  color: var(--ink-2);
+}
+
+.main {
+  display: grid;
+  align-content: start;
+  gap: 1.1em;
+  max-width: 62ch;
+}
+
+.first {
+  font-size: clamp(1.3rem, 1.9vw, 1.7rem);
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+}
+
+.paragraph {
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  color: var(--ink-2);
+}
+
+.facts {
+  display: grid;
+  margin: 1.2em 0 0;
+  border-top: var(--border) solid var(--line);
+}
+
+.fact {
+  display: grid;
+  grid-template-columns: 9rem minmax(0, 1fr);
+  gap: 16px;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.fact dd {
+  margin: 0;
+}
+
+@media (max-width: 1000px) {
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 560px) {
+  .fact {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2px;
+  }
+
+  .motto {
+    gap: 18px;
+    padding: 18px;
+  }
+
+  .seal {
+    font-size: 2.8rem;
+  }
+}

@@ -1,0 +1,169 @@
+.section {
+  padding-top: clamp(112px, 13vw, 200px);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: clamp(56px, 6vw, 88px) var(--panel-gap);
+  margin: clamp(48px, 6vw, 80px) 0 0;
+}
+
+.cell {
+  grid-column: span var(--span, 6);
+  min-width: 0;
+}
+
+.card {
+  display: grid;
+  gap: 18px;
+  height: 100%;
+  align-content: start;
+}
+
+/* A frame is ink with the picture inset by the border width, so borders survive clip-path. */
+.frame {
+  --cut: 0px;
+  --clip: none;
+  --clip-inner: inset(var(--border));
+  position: relative;
+  height: clamp(260px, 29vw, 440px);
+  background: var(--line);
+  clip-path: var(--clip);
+}
+
+.frameInner {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  gap: var(--border);
+  background: var(--line);
+  clip-path: var(--clip-inner);
+}
+
+.frameInner[data-layout="split"] {
+  grid-template-columns: 1.55fr 1fr;
+}
+
+.frameInner[data-layout="phones"] {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.shot {
+  position: relative;
+  overflow: hidden;
+  background: var(--paper-2);
+}
+
+.shot img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 1.1s var(--ease-out);
+}
+
+.card:hover .shot img {
+  transform: scale(1.035);
+}
+
+.body {
+  display: grid;
+  gap: 8px;
+  max-width: 62ch;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-stretch: 68%;
+  font-size: clamp(2rem, 3.2vw, 3.1rem);
+  line-height: 0.92;
+  text-transform: uppercase;
+  transition: font-stretch 0.5s var(--ease-out);
+}
+
+.card:hover .title {
+  font-stretch: 80%;
+}
+
+.subtitle {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-stretch: 85%;
+  font-size: 1.0625rem;
+  color: var(--accent-ink);
+}
+
+.summary {
+  font-size: 0.9875rem;
+  line-height: 1.55;
+  color: var(--ink-2);
+  margin-bottom: 4px;
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  margin-top: 4px;
+}
+
+/* the slanted gutter — one deliberate break in the grid */
+@media (min-width: 1024px) {
+  .cell[data-cut] .frame {
+    --cut: clamp(36px, 3.4vw, 56px);
+  }
+
+  .cell[data-cut="right"] .frame {
+    --clip: polygon(0 0, 100% 0, calc(100% - var(--cut)) 100%, 0 100%);
+    --clip-inner: polygon(
+      var(--border) var(--border),
+      calc(100% - var(--border) - 0.25px) var(--border),
+      calc(100% - var(--cut) - var(--border)) calc(100% - var(--border)),
+      var(--border) calc(100% - var(--border))
+    );
+  }
+
+  .cell[data-cut="left"] .frame {
+    --clip: polygon(var(--cut) 0, 100% 0, 100% 100%, 0 100%);
+    --clip-inner: polygon(
+      calc(var(--cut) + var(--border)) var(--border),
+      calc(100% - var(--border)) var(--border),
+      calc(100% - var(--border)) calc(100% - var(--border)),
+      calc(var(--border) + 0.25px) calc(100% - var(--border))
+    );
+    /* shift left so the slanted gutter is as wide as the regular one */
+    margin-left: calc(var(--cut) * -1 + var(--panel-gap) * 0.4);
+  }
+}
+
+@media (max-width: 1023px) {
+  .cell {
+    grid-column: span 6;
+  }
+}
+
+@media (max-width: 760px) {
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .cell {
+    grid-column: 1;
+  }
+
+  .frame {
+    height: auto;
+    aspect-ratio: 4 / 3;
+  }
+
+  .frameInner[data-layout="phones"] {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .cell:has(.frameInner[data-layout="phones"]) .frame {
+    aspect-ratio: 4 / 3.4;
+  }
+}

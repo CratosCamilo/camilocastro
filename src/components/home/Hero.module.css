@@ -1,0 +1,295 @@
+.hero {
+  --mx: 0;
+  --my: 0;
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  min-height: calc(100svh - var(--header-h));
+  overflow: hidden;
+}
+
+/* ---- decorative layers ---- */
+
+.lines {
+  --lines-o: 0.085;
+  position: absolute;
+  inset: -4%;
+  z-index: -1;
+  color: var(--ink);
+  opacity: var(--lines-o);
+  transform: translate3d(calc(var(--mx) * -14px), calc(var(--my) * -10px), 0);
+  transition: transform 0.9s var(--ease-out);
+  animation: burst 1.2s var(--ease-out) 0.62s both;
+}
+
+.lines svg {
+  width: 100%;
+  height: 100%;
+}
+
+.linesNarrow {
+  display: none;
+}
+
+@keyframes burst {
+  from {
+    opacity: 0;
+    scale: 1.14;
+  }
+  to {
+    opacity: var(--lines-o);
+    scale: 1;
+  }
+}
+
+.tone {
+  position: absolute;
+  z-index: -1;
+  left: 0;
+  bottom: 0;
+  width: 46%;
+  height: 58%;
+  -webkit-mask-image: radial-gradient(ellipse at 0% 100%, #000 10%, transparent 68%);
+  mask-image: radial-gradient(ellipse at 0% 100%, #000 10%, transparent 68%);
+  opacity: 0.9;
+}
+
+/* ---- layout ---- */
+
+.inner {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: clamp(18px, 3vw, 36px);
+  padding-block: clamp(18px, 2.4vw, 30px) clamp(26px, 3.6vw, 44px);
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--rule);
+  animation: fade 0.8s var(--ease-out) 0.15s both;
+}
+
+.vol {
+  color: var(--ink-3);
+}
+
+.stage {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: clamp(12px, 3vw, 48px);
+  align-self: center;
+}
+
+.name {
+  flex: 0 1 auto;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-stretch: 62%;
+  /* as wide as the page allows, but never taller than a third of the screen */
+  font-size: clamp(5.2rem, min(24.5vw, 33svh), 23rem);
+  line-height: 0.8;
+  letter-spacing: -0.012em;
+  text-transform: uppercase;
+  text-wrap: nowrap;
+}
+
+.name :global(.line__inner) {
+  animation: line-up 1.15s var(--ease-out) both;
+}
+
+.l1 {
+  animation-delay: 0.08s !important;
+}
+
+.l2 {
+  animation-delay: 0.2s !important;
+}
+
+@keyframes line-up {
+  from {
+    transform: translate3d(0, 104%, 0);
+  }
+  to {
+    transform: none;
+  }
+}
+
+.sealWrap {
+  flex: none;
+  transform: translate3d(calc(var(--mx) * 7px), calc(var(--my) * 6px), 0);
+  transition: transform 0.9s var(--ease-out);
+}
+
+.seal {
+  font-size: clamp(3.4rem, 8.4vw, 8rem);
+  rotate: -6deg;
+  box-shadow: 0 0 0 0 transparent;
+  animation: stamp 0.62s var(--ease-stamp) 0.62s both;
+}
+
+@keyframes stamp {
+  from {
+    opacity: 0;
+    scale: 1.9;
+    rotate: -20deg;
+  }
+  60% {
+    opacity: 1;
+  }
+  to {
+    opacity: 1;
+    scale: 1;
+    rotate: -6deg;
+  }
+}
+
+.bottom {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 4fr) minmax(0, 3fr);
+  gap: clamp(20px, 3vw, 48px);
+  align-items: end;
+  padding-top: clamp(16px, 2vw, 22px);
+  border-top: var(--border) solid var(--line);
+}
+
+.lede {
+  max-width: 30ch;
+  font-size: clamp(1.25rem, 1.9vw, 1.75rem);
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  animation: fade-up 0.9s var(--ease-out) 0.85s both;
+}
+
+.facts {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  animation: fade-up 0.9s var(--ease-out) 0.95s both;
+}
+
+.fact {
+  display: grid;
+  grid-template-columns: 7.5rem 1fr;
+  gap: 12px;
+  align-items: baseline;
+  font-size: 0.9375rem;
+  line-height: 1.4;
+}
+
+.fact dd {
+  margin: 0;
+  color: var(--ink-2);
+}
+
+.ctas {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 14px 22px;
+  animation: fade-up 0.9s var(--ease-out) 1.05s both;
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 16px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ---- tablet ---- */
+
+@media (max-width: 1100px) {
+  .bottom {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .ctas {
+    grid-column: 1 / -1;
+    justify-content: flex-start;
+  }
+}
+
+/* ---- phones ---- */
+
+@media (max-width: 700px) {
+  .hero {
+    min-height: auto;
+  }
+
+  .linesWide {
+    display: none;
+  }
+
+  .linesNarrow {
+    display: block;
+  }
+
+  .lines {
+    --lines-o: 0.1;
+  }
+
+  .tone {
+    width: 80%;
+    height: 40%;
+  }
+
+  .vol {
+    display: none;
+  }
+
+  .stage {
+    display: block;
+    padding-block: clamp(28px, 9vw, 56px) 18px;
+  }
+
+  .name {
+    font-size: min(25.5vw, 8.6rem);
+  }
+
+  /* on phones the seal is stamped over the corner of the name */
+  .sealWrap {
+    position: absolute;
+    right: -4px;
+    bottom: -2px;
+  }
+
+  .seal {
+    font-size: clamp(1.9rem, 9vw, 2.8rem);
+  }
+
+  .bottom {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 22px;
+  }
+
+  .fact {
+    grid-template-columns: 6.5rem 1fr;
+  }
+
+  .ctas {
+    grid-column: auto;
+  }
+
+  .ctas :global(.btn) {
+    flex: 1 1 auto;
+  }
+}
