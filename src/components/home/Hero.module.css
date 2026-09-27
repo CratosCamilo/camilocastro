@@ -98,8 +98,10 @@
   text-wrap: nowrap;
 }
 
+/* The name rises the last third of the way into place. It is never fully hidden,
+   so the browser can paint it — and count it as LCP — on the very first frame. */
 .name :global(.line__inner) {
-  animation: line-up 1.15s var(--ease-out) both;
+  animation: line-up 1s var(--ease-out) both;
 }
 
 .l1 {
@@ -112,7 +114,7 @@
 
 @keyframes line-up {
   from {
-    transform: translate3d(0, 104%, 0);
+    transform: translate3d(0, 34%, 0);
   }
   to {
     transform: none;
