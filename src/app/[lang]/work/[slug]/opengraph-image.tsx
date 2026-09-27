@@ -20,6 +20,7 @@ export default async function Image({ params }: { params: Promise<{ lang: string
   const index = featured.indexOf(project) + 1;
   const cover = await readFile(join(process.cwd(), "assets", "og", `${project.slug}.jpg`));
   const src = `data:image/jpeg;base64,${cover.toString("base64")}`;
+  const focus = project.panels[0].items[0].shot.position ?? "center";
 
   return new ImageResponse(
     (
@@ -47,7 +48,7 @@ export default async function Image({ params }: { params: Promise<{ lang: string
         </div>
         <div style={{ display: "flex", flex: 1, border: `4px solid ${OG.ink}`, overflow: "hidden", background: "#e7e3d8" }}>
           {/* eslint-disable-next-line @next/next/no-img-element -- Satori renders plain <img> */}
-          <img src={src} alt="" width={560} height={534} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "left top" }} />
+          <img src={src} alt="" width={560} height={534} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: focus }} />
         </div>
       </div>
     ),
