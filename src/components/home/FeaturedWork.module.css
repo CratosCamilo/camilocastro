@@ -183,47 +183,11 @@
 
   .sticky {
     position: static;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    column-gap: 40px;
-  }
-
-  .head,
-  .kicker,
-  .title,
-  .client,
-  .summary {
-    grid-column: 1;
-  }
-
-  .highlights,
-  .stack,
-  .links {
-    grid-column: 2;
-  }
-
-  .highlights {
-    grid-row: 2 / span 3;
-    align-self: start;
+    max-width: 720px;
   }
 }
 
 @media (max-width: 760px) {
-  .sticky {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .head,
-  .kicker,
-  .title,
-  .client,
-  .summary,
-  .highlights,
-  .stack,
-  .links {
-    grid-column: 1;
-    grid-row: auto;
-  }
-
   .links :global(.btn) {
     width: 100%;
   }
