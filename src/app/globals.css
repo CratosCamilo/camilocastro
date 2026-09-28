@@ -642,9 +642,12 @@ p {
 }
 
 /* line-by-line headline reveal */
+/* The clip box reaches above the cap height so accented capitals (Á, Í, Ó) aren't cut. */
 .line {
   display: block;
   overflow: hidden;
+  padding-top: 0.16em;
+  margin-top: -0.16em;
   padding-bottom: 0.04em;
   margin-bottom: -0.04em;
 }

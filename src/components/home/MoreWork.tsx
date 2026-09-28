@@ -7,8 +7,8 @@ import { Chapter } from "@/components/Chapter";
 import { t } from "@/lib/i18n";
 import styles from "./MoreWork.module.css";
 
-/** Column spans per row, in reading order. The first row meets at a slanted gutter. */
-const SPANS = [7, 5, 5, 7, 5, 7];
+/** Column spans per row, in reading order. The first row meets at a slanted gutter; the last row has three panels. */
+const SPANS = [7, 5, 5, 7, 4, 4, 4];
 
 export function MoreWork({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   return (
