@@ -63,15 +63,11 @@ export function Hero({ dict }: { dict: Dictionary }) {
 
         <div className={styles.bottom}>
           <p className={styles.lede}>{h.lede}</p>
-          <dl className={styles.facts}>
-            {h.facts.map((f) => (
-              <div key={f.term} className={styles.fact}>
-                <dt className="mono muted">{f.term}</dt>
-                <dd>{f.detail}</dd>
-              </div>
-            ))}
-          </dl>
           <div className={styles.ctas}>
+            <p className={`mono ${styles.available}`}>
+              <span className={styles.dot} aria-hidden="true" />
+              {h.available}
+            </p>
             <a className="btn btn--solid" href="#work">
               {h.ctaWork}
               <span aria-hidden="true">↓</span>

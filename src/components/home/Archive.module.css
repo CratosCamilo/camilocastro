@@ -2,9 +2,42 @@
   padding-top: clamp(112px, 13vw, 200px);
 }
 
+.details {
+  margin-top: clamp(24px, 3vw, 36px);
+}
+
+.summary {
+  list-style: none;
+  cursor: pointer;
+}
+
+.summary::-webkit-details-marker {
+  display: none;
+}
+
+.chevron {
+  display: inline-block;
+  transition: transform 0.35s var(--ease-out);
+}
+
+.details[open] .chevron {
+  transform: rotate(180deg);
+}
+
+.details[open] .table {
+  animation: open 0.5s var(--ease-out);
+}
+
+@keyframes open {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
 .table {
   width: 100%;
-  margin-top: clamp(36px, 4vw, 56px);
+  margin-top: clamp(24px, 3vw, 40px);
   border-collapse: collapse;
   font-size: 0.9375rem;
 }

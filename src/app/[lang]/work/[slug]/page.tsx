@@ -6,7 +6,8 @@ import type { CSSProperties, ReactNode } from "react";
 import { hasLocale, locales, ogLocale, type Locale } from "@/i18n/config";
 import { getDictionary, type Dictionary } from "@/i18n/dictionaries";
 import { featured, getFeatured, type FeaturedProject } from "@/content/projects";
-import { Panels } from "@/components/work/Panels";
+import { Device } from "@/components/device/Device";
+import { Showcase } from "@/components/device/Showcase";
 import { KilnDiagram, PayrollDiagram } from "@/components/work/Diagrams";
 import { href, pad, t } from "@/lib/i18n";
 import { site } from "@/lib/site";
@@ -72,7 +73,7 @@ export default async function CaseStudyPage({ params }: PageProps<"/[lang]/work/
       <CaseHeader project={project} index={index} lang={lang} dict={dict} />
 
       <div className={`container ${styles.hero}`}>
-        <Panels rows={project.panels} locale={lang} area={0.94} eager />
+        <Showcase showcase={project.showcase} locale={lang} area={0.9} eager className={styles.showcase} />
       </div>
 
       <div className={`container ${styles.body}`}>
@@ -121,16 +122,13 @@ export default async function CaseStudyPage({ params }: PageProps<"/[lang]/work/
         <Section n={project.story.diagram ? 5 : 4} title={dict.caseStudy.gallery}>
           <div className={styles.gallery}>
             {project.story.gallery.map((shot, i) => (
-              <figure key={i} className={styles.figure}>
-                <div className={styles.frame} data-print style={{ "--delay": `${(i % 2) * 120}ms` } as CSSProperties}>
-                  <Image
-                    src={shot.src}
-                    alt={t(shot.alt, lang)}
-                    placeholder="blur"
-                    className="print"
-                    sizes="(max-width: 900px) 100vw, 40vw"
-                  />
-                </div>
+              <figure key={i} className={styles.figure} data-kind={shot.device ?? "browser"}>
+                <Device
+                  shot={shot}
+                  locale={lang}
+                  sizes={i === 0 ? "(max-width: 900px) 100vw, 62vw" : "(max-width: 900px) 100vw, 32vw"}
+                  style={{ "--delay": `${(i % 2) * 120}ms` } as CSSProperties}
+                />
                 {shot.caption && <figcaption className={`mono ${styles.caption}`}>{t(shot.caption, lang)}</figcaption>}
               </figure>
             ))}
@@ -188,7 +186,14 @@ function CaseHeader({ project: p, index, lang, dict }: { project: FeaturedProjec
       </div>
 
       <div className={styles.intro}>
-        <p className={styles.summary}>{t(p.summary, lang)}</p>
+        <div className={styles.introText}>
+          <p className={styles.summary}>{t(p.summary, lang)}</p>
+          <ul className={styles.highlights}>
+            {p.highlights.map((h, i) => (
+              <li key={i}>{t(h, lang)}</li>
+            ))}
+          </ul>
+        </div>
         <dl className={styles.meta}>
           <div>
             <dt className="mono muted">{dict.work.client}</dt>
@@ -259,7 +264,7 @@ function Section({ n, title, children }: { n: number; title: string; children: R
 }
 
 function NextCase({ project: p, lang, dict }: { project: FeaturedProject; lang: Locale; dict: Dictionary }) {
-  const cover = p.panels[0].items[0].shot;
+  const cover = p.showcase.shots[0];
   return (
     <nav className={`container ${styles.next}`} aria-label={dict.caseStudy.next}>
       <Link href={href(lang, `/work/${p.slug}`)} className={styles.nextLink}>

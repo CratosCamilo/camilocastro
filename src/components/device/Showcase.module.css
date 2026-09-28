@@ -1,0 +1,88 @@
+/* A stage has a fixed proportion so neighbouring stages line up; the devices are
+   sized in percent of its width and centred in it. */
+.stage {
+  position: relative;
+  isolation: isolate;
+  aspect-ratio: 16 / 10;
+  display: grid;
+  place-items: center;
+}
+
+/* a soft screentone field behind the devices */
+.stage::before {
+  content: "";
+  position: absolute;
+  inset: 8% 4% 2%;
+  z-index: -2;
+  background-image: radial-gradient(circle at center, var(--tone) 1.05px, transparent 1.35px);
+  background-size: 7px 7px;
+  -webkit-mask-image: radial-gradient(ellipse at 50% 55%, #000 0%, transparent 68%);
+  mask-image: radial-gradient(ellipse at 50% 55%, #000 0%, transparent 68%);
+  opacity: 0.8;
+}
+
+.main,
+.side,
+.item {
+  width: var(--w);
+  transition: transform 0.6s var(--ease-out);
+}
+
+/* ---- duo: the main device, and a second one stepping in front of it ---- */
+
+.stage[data-layout="duo"] {
+  place-items: center start;
+}
+
+.stage[data-layout="duo"] .main {
+  grid-area: 1 / 1;
+  margin-bottom: 4%;
+}
+
+.stage[data-layout="duo"] .side {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+}
+
+.stage[data-layout="duo"][data-flip] {
+  place-items: center end;
+}
+
+.stage[data-layout="duo"][data-flip] .side {
+  right: auto;
+  left: 0;
+}
+
+/* ---- phones: a fanned row, the middle one raised ---- */
+
+.stage[data-layout="phones"] {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.stage[data-layout="phones"] .item {
+  margin-inline: -1.6%;
+  rotate: calc((var(--i) - 1) * 4deg);
+  translate: 0 calc(4% * (var(--i) - 1) * (var(--i) - 1));
+}
+
+.stage[data-layout="phones"] .item:nth-child(2) {
+  z-index: 2;
+}
+
+/* ---- hover: the front device lifts a little ---- */
+
+@media (hover: hover) {
+  :where(a:hover, a:focus-visible) > .stage[data-layout="duo"] .side,
+  .stage[data-layout="duo"]:hover .side {
+    transform: translateY(-2.5%);
+  }
+
+  :where(a:hover, a:focus-visible) > .stage[data-layout="phones"] .item,
+  .stage[data-layout="phones"]:hover .item {
+    transform: translateY(-2%);
+  }
+}

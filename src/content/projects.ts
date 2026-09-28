@@ -9,13 +9,15 @@ import type { Localized } from "@/i18n/config";
  */
 
 import payrollCover from "./work/payroll-accounting/cover.webp";
-import payrollVoucher from "./work/payroll-accounting/voucher.webp";
 import payrollOvertime from "./work/payroll-accounting/overtime-modal.webp";
 import payrollAccounts from "./work/payroll-accounting/chart-of-accounts.webp";
 import payrollParameters from "./work/payroll-accounting/parameters.webp";
 import payrollHome from "./work/payroll-accounting/home.webp";
 import payrollGoTo from "./work/payroll-accounting/go-to.webp";
 import payrollReports from "./work/payroll-accounting/reports.webp";
+import payrollPhoneHome from "./work/payroll-accounting/phone-home.webp";
+import payrollPhoneDraft from "./work/payroll-accounting/phone-draft.webp";
+import payrollTabletVoucher from "./work/payroll-accounting/tablet-voucher.webp";
 
 import hotelCover from "./work/hotel-logistico/cover.webp";
 import hotelMobile from "./work/hotel-logistico/mobile.webp";
@@ -47,32 +49,34 @@ import invProducts from "./work/raw-materials-inventory/products.webp";
 import invPrintable from "./work/raw-materials-inventory/printable.webp";
 
 import planningCover from "./work/leons-planning/cover.webp";
+import planningPhoneOrder from "./work/leons-planning/phone-order.webp";
 import loulozList from "./work/louloz-inventory/list.webp";
 import loulozFilters from "./work/louloz-inventory/filters.webp";
 import loulozSizes from "./work/louloz-inventory/sizes.webp";
 import groomersCover from "./work/groomers-house/cover.webp";
+import groomersMobile from "./work/groomers-house/mobile.webp";
 import progressDashboard from "./work/myprogress/dashboard.webp";
 import progressStats from "./work/myprogress/stats.webp";
 import progressWeight from "./work/myprogress/bodyweight.webp";
-import impostorCover from "./work/impostor/cover.webp";
-import preflopCover from "./work/preflop-viewer/cover.webp";
+import impostorTablet from "./work/impostor/tablet.webp";
+import preflopPhone from "./work/preflop-viewer/phone.webp";
 import reconCover from "./work/reconciliation-automations/cover.webp";
+
+/** The device a screenshot is shown in: it follows how the screenshot was taken. */
+export type DeviceKind = "laptop" | "tablet" | "phone" | "browser";
 
 export type Shot = {
   src: StaticImageData;
   alt: Localized;
   caption?: Localized;
-  /** CSS object-position when the panel crops the image. */
+  /** CSS object-position when the device's screen crops the image. */
   position?: string;
+  /** Defaults to "browser" (a window at the image's own proportions). */
+  device?: DeviceKind;
 };
 
-export type PanelRow = {
-  /** Aspect ratio of the whole row on wide screens, e.g. "16 / 9". */
-  ratio: string;
-  /** Aspect ratio used when the row collapses on small screens. */
-  mobileRatio?: string;
-  items: { shot: Shot; span: number }[];
-};
+/** How screenshots are staged: a main device with a second in front, one device, or a row of phones. */
+export type Showcase = { layout: "duo" | "solo" | "phones"; shots: Shot[] };
 
 export type StatusTone = "live" | "build" | "academic" | "personal";
 
@@ -84,12 +88,14 @@ export type FeaturedProject = {
   kind: Localized;
   year: string;
   status: { tone: StatusTone; label: Localized };
+  /** One line for the home page. */
+  tagline: Localized;
   summary: Localized;
   highlights: Localized[];
   role: Localized;
   stack: string[];
   links: { live?: string; code?: string[] };
-  panels: PanelRow[];
+  showcase: Showcase;
   story: {
     brief: Localized[];
     built: Localized[];
@@ -105,15 +111,11 @@ export type SideProject = {
   slug: string;
   name: string;
   title: Localized;
-  summary: Localized;
   kind: Localized;
   year: string;
   stack: string[];
   links: { live?: string; code?: string };
-  cover: Shot;
-  /** How the card composes its images: one cover, cover + detail, or a row of phone screens. */
-  layout?: "single" | "split" | "phones";
-  extra?: Shot[];
+  showcase: Showcase;
 };
 
 export type ArchiveItem = {
@@ -141,6 +143,10 @@ export const featured: FeaturedProject[] = [
     kind: CLIENT_SYSTEM,
     year: "2026",
     status: { tone: "build", label: L("In build · go-live Jan 2027", "En construcción · salida en ene. 2027") },
+    tagline: L(
+      "Replaces a factory's ERP: Colombian payroll, automatic accounting, DIAN e-payroll and PILA — with 569 tests behind it.",
+      "Reemplaza el ERP de una panificadora: nómina colombiana, contabilidad automática, nómina electrónica DIAN y PILA, con 569 pruebas detrás.",
+    ),
     summary: L(
       "The factory's own replacement for Siesa ERP: Colombian payroll, automatic accounting vouchers, DIAN electronic payroll and PILA social-security files — with snapshots, reversals and an audit trail.",
       "El reemplazo propio del ERP Siesa para la fábrica: nómina colombiana, comprobantes contables automáticos, nómina electrónica DIAN y planillas PILA — con snapshots, reversiones y auditoría.",
@@ -165,53 +171,28 @@ export const featured: FeaturedProject[] = [
     ),
     stack: ["Python", "FastAPI", "SQLAlchemy 2 (async)", "PostgreSQL 16", "Alembic", "Redis + arq", "React 18", "TanStack Query", "Tailwind CSS", "pytest", "GitHub Actions", "Docker"],
     links: {},
-    panels: [
-      {
-        ratio: "16 / 9.6",
-        mobileRatio: "4 / 3",
-        items: [
-          {
-            span: 12,
-            shot: {
-              src: payrollCover,
-              position: "left top",
-              alt: L(
-                "Live draft of the first September fortnight in the ledger-style interface: section rail and tabs, eight employees with hours, earnings, deductions and net pay, one row expanded into its concept lines and the totals pinned at the bottom.",
-                "Borrador vivo de la primera quincena de septiembre en la interfaz tipo libro mayor: riel de secciones y pestañas, ocho empleados con horas, devengos, deducciones y neto, una fila desplegada en sus conceptos y los totales fijos abajo.",
-              ),
-            },
-          },
-        ],
-      },
-      {
-        ratio: "16 / 6.4",
-        mobileRatio: "4 / 3",
-        items: [
-          {
-            span: 7,
-            shot: {
-              src: payrollVoucher,
-              position: "left top",
-              alt: L(
-                "Accounting vouchers generated by the payroll run, in the dark theme: one open with equal debits and credits and its eight lines.",
-                "Comprobantes contables generados por la liquidación, en tema oscuro: uno abierto con débitos y créditos iguales y sus ocho líneas.",
-              ),
-            },
-          },
-          {
-            span: 5,
-            shot: {
-              src: payrollOvertime,
-              position: "left top",
-              alt: L(
-                "Dialog to add a novelty to an employee: earnings and deductions tabs, and for overtime the hours, the ordinary hourly rate filled automatically, the surcharge factor and the cost center.",
-                "Diálogo para agregar una novedad a un empleado: pestañas de devengos y deducciones y, para horas extras, las horas, el valor de la hora ordinaria calculado, el factor de recargo y el centro de costo.",
-              ),
-            },
-          },
-        ],
-      },
-    ],
+    showcase: {
+      layout: "duo",
+      shots: [
+        {
+          src: payrollCover,
+          device: "laptop",
+          position: "left top",
+          alt: L(
+            "Live draft of the first September fortnight in the ledger-style interface: section rail and tabs, eight employees with hours, earnings, deductions and net pay, one row expanded into its concept lines and the totals pinned at the bottom.",
+            "Borrador vivo de la primera quincena de septiembre en la interfaz tipo libro mayor: riel de secciones y pestañas, ocho empleados con horas, devengos, deducciones y neto, una fila desplegada en sus conceptos y los totales fijos abajo.",
+          ),
+        },
+        {
+          src: payrollPhoneHome,
+          device: "phone",
+          alt: L(
+            "The home screen on a phone, in the dark theme: shortcuts to the day's tasks.",
+            "El inicio en un teléfono, en tema oscuro: accesos directos a las tareas del día.",
+          ),
+        },
+      ],
+    },
     story: {
       brief: [
         L(
@@ -287,6 +268,7 @@ export const featured: FeaturedProject[] = [
       gallery: [
         {
           src: payrollHome,
+          device: "laptop",
           alt: L("Home screen in the dark theme: shortcuts to the daily tasks and the seven steps of the month-end route, next to the keyboard shortcuts.", "Pantalla de inicio en tema oscuro: accesos directos a las tareas del día y los siete pasos de la ruta del cierre mensual, junto a los atajos de teclado."),
           caption: L("Home: shortcuts for the day and the month-end route, step by step.", "Inicio: accesos directos del día y la ruta del cierre mensual, paso a paso."),
         },
@@ -302,6 +284,7 @@ export const featured: FeaturedProject[] = [
         },
         {
           src: payrollParameters,
+          device: "laptop",
           alt: L("Yearly parameters for 2026: health, pension and severance percentages, transport allowance and thresholds.", "Parámetros del año 2026: porcentajes de salud, pensión y cesantías, auxilio de transporte y umbrales."),
           caption: L("Yearly legal parameters live in data, not in code.", "Los parámetros legales del año viven en datos, no en el código."),
         },
@@ -309,6 +292,23 @@ export const featured: FeaturedProject[] = [
           src: payrollReports,
           alt: L("Reports index in the dark theme, grouped into accounting, payroll, controls and reconciliations, and contracts.", "Índice de reportes en tema oscuro, agrupado en contabilidad, nómina, controles y cuadres, y contratos."),
           caption: L("Reports grouped by what they answer: accounting, payroll, controls.", "Reportes agrupados por lo que responden: contabilidad, nómina, controles."),
+        },
+        {
+          src: payrollTabletVoucher,
+          device: "tablet",
+          alt: L("The vouchers generated by the payroll run on a tablet, one open with equal debits and credits.", "Los comprobantes generados por la liquidación en una tablet, uno abierto con débitos y créditos iguales."),
+          caption: L("Every payroll run posts balanced vouchers.", "Cada liquidación contabiliza comprobantes cuadrados."),
+        },
+        {
+          src: payrollPhoneDraft,
+          device: "phone",
+          alt: L("The live payroll draft on a phone, in the dark theme, with the totals pinned at the bottom.", "El borrador vivo de la nómina en un teléfono, en tema oscuro, con los totales fijos abajo."),
+          caption: L("The live draft on a phone, totals always in view.", "El borrador vivo en el teléfono, con los totales siempre a la vista."),
+        },
+        {
+          src: payrollOvertime,
+          alt: L("Dialog to add a novelty to an employee: earnings and deductions tabs, and for overtime the hours, the ordinary hourly rate filled automatically, the surcharge factor and the cost center.", "Diálogo para agregar una novedad a un empleado: pestañas de devengos y deducciones y, para horas extras, las horas, el valor de la hora ordinaria calculado, el factor de recargo y el centro de costo."),
+          caption: L("Adding overtime: the hourly rate fills itself in.", "Agregar horas extras: el valor de la hora se calcula solo."),
         },
       ],
     },
@@ -321,6 +321,10 @@ export const featured: FeaturedProject[] = [
     kind: CLIENT_SITE,
     year: "2026",
     status: { tone: "live", label: L("Live · hotellogistico.com", "En línea · hotellogistico.com") },
+    tagline: L(
+      "A framework-free landing for a hotel in Santa Marta that turns visits into WhatsApp bookings.",
+      "Una landing sin frameworks para un hotel en Santa Marta que convierte visitas en reservas por WhatsApp.",
+    ),
     summary: L(
       "A framework-free landing page for a hotel ten minutes from El Rodadero: aerial video, room carousels, a gallery and a booking form that turns into a WhatsApp message.",
       "Una landing sin frameworks para un hotel a diez minutos de El Rodadero: video aéreo, carruseles de habitaciones, galería y un formulario de reserva que se convierte en un mensaje de WhatsApp.",
@@ -342,47 +346,25 @@ export const featured: FeaturedProject[] = [
     role: L("Design and development", "Diseño y desarrollo"),
     stack: ["HTML", "CSS", "JavaScript", "Google Maps", "Vercel"],
     links: { live: "https://www.hotellogistico.com" },
-    panels: [
-      {
-        ratio: "16 / 7.6",
-        mobileRatio: "4 / 3.4",
-        items: [
-          {
-            span: 9,
-            shot: {
-              src: hotelCover,
-              position: "center",
-              alt: L(
-                "Hotel Logístico home page: aerial video of a Santa Marta beach behind the headline “Hotel en Santa Marta” and a WhatsApp booking button.",
-                "Inicio de Hotel Logístico: video aéreo de una playa de Santa Marta detrás del titular «Hotel en Santa Marta» y un botón para reservar por WhatsApp.",
-              ),
-            },
-          },
-          {
-            span: 3,
-            shot: {
-              src: hotelMobile,
-              position: "center top",
-              alt: L("The same hero on a phone.", "El mismo inicio en un teléfono."),
-            },
-          },
-        ],
-      },
-      {
-        ratio: "16 / 5.6",
-        mobileRatio: "16 / 9",
-        items: [
-          {
-            span: 12,
-            shot: {
-              src: hotelPool,
-              position: "center",
-              alt: L("Pool section: a photo of the pool area next to the heading “Zona de piscina”.", "Sección de piscina: foto del área de piscina junto al título «Zona de piscina»."),
-            },
-          },
-        ],
-      },
-    ],
+    showcase: {
+      layout: "duo",
+      shots: [
+        {
+          src: hotelCover,
+          device: "laptop",
+          position: "center",
+          alt: L(
+            "Hotel Logístico home page: aerial video of a Santa Marta beach behind the headline “Hotel en Santa Marta” and a WhatsApp booking button.",
+            "Inicio de Hotel Logístico: video aéreo de una playa de Santa Marta detrás del titular «Hotel en Santa Marta» y un botón para reservar por WhatsApp.",
+          ),
+        },
+        {
+          src: hotelMobile,
+          device: "phone",
+          alt: L("The same hero on a phone.", "El mismo inicio en un teléfono."),
+        },
+      ],
+    },
     story: {
       brief: [
         L(
@@ -451,6 +433,11 @@ export const featured: FeaturedProject[] = [
           alt: L("Gallery grid with the lobby, a corridor and the façade.", "Galería con el lobby, un pasillo y la fachada."),
           caption: L("Gallery with a keyboard- and swipe-navigable lightbox.", "Galería con lightbox navegable con teclado y swipe."),
         },
+        {
+          src: hotelPool,
+          alt: L("Pool section: a photo of the pool area next to the heading “Zona de piscina”.", "Sección de piscina: foto del área de piscina junto al título «Zona de piscina»."),
+          caption: L("The pool, announced before it opens.", "La piscina, anunciada antes de abrir."),
+        },
       ],
     },
   },
@@ -462,6 +449,10 @@ export const featured: FeaturedProject[] = [
     kind: CLIENT_SITE,
     year: "2026",
     status: { tone: "live", label: L("Live · calzadoleons.com", "En línea · calzadoleons.com") },
+    tagline: L(
+      "A wholesale catalog for a shoe factory, with a Python pipeline that makes every product photo match.",
+      "Catálogo mayorista para una fábrica de calzado, con un pipeline en Python que unifica todas las fotos de producto.",
+    ),
     summary: L(
       "An editorial catalog for a Colombian shoe manufacturer that sells to chains and distributors — plus a Python pipeline that turns raw product photos into one consistent, studio-style catalog.",
       "Un catálogo editorial para una fábrica colombiana que vende a cadenas y distribuidores — con un pipeline en Python que convierte fotos crudas de producto en un catálogo uniforme, estilo estudio.",
@@ -483,50 +474,24 @@ export const featured: FeaturedProject[] = [
     role: L("Design and development", "Diseño y desarrollo"),
     stack: ["Next.js 15", "TypeScript", "Tailwind CSS v4", "Python", "rembg", "Pillow", "Vercel"],
     links: { live: "https://calzadoleons.com" },
-    panels: [
-      {
-        ratio: "16 / 10",
-        mobileRatio: "16 / 11",
-        items: [
-          {
-            span: 12,
-            shot: {
-              src: leonsCover,
-              position: "center top",
-              alt: L(
-                "LEONS Footwear home page: the headline “Calidad que se impone” beside a photo of a man holding a white sneaker.",
-                "Inicio de LEONS Footwear: el titular «Calidad que se impone» junto a la foto de un hombre que sostiene una zapatilla blanca.",
-              ),
-            },
-          },
-        ],
-      },
-      {
-        ratio: "16 / 7",
-        mobileRatio: "4 / 3.6",
-        items: [
-          {
-            span: 8,
-            shot: {
-              src: leonsProducts,
-              position: "center 30%",
-              alt: L(
-                "Featured products: eight shoes photographed on identical beige cards, the output of the image pipeline.",
-                "Productos destacados: ocho zapatos sobre tarjetas beige idénticas, resultado del pipeline de imágenes.",
-              ),
-            },
-          },
-          {
-            span: 4,
-            shot: {
-              src: leonsMobile,
-              position: "center top",
-              alt: L("The home page on a phone.", "El inicio en un teléfono."),
-            },
-          },
-        ],
-      },
-    ],
+    showcase: {
+      layout: "duo",
+      shots: [
+        {
+          src: leonsCover,
+          device: "laptop",
+          alt: L(
+            "LEONS Footwear home page: the headline “Calidad que se impone” beside a photo of a man holding a white sneaker.",
+            "Inicio de LEONS Footwear: el titular «Calidad que se impone» junto a la foto de un hombre que sostiene una zapatilla blanca.",
+          ),
+        },
+        {
+          src: leonsMobile,
+          device: "phone",
+          alt: L("The home page on a phone.", "El inicio en un teléfono."),
+        },
+      ],
+    },
     story: {
       brief: [
         L(
@@ -582,6 +547,7 @@ export const featured: FeaturedProject[] = [
         },
         {
           src: leonsProduct,
+          device: "laptop",
           alt: L("Product page for the “Miel” boot with gallery, reference data and a WhatsApp inquiry button.", "Página de producto de la bota «Miel» con galería, datos de referencia y botón de consulta por WhatsApp."),
           caption: L("Product detail: gallery, reference and one clear next step.", "Detalle de producto: galería, referencia y un siguiente paso claro."),
         },
@@ -589,6 +555,11 @@ export const featured: FeaturedProject[] = [
           src: leonsCollections,
           alt: L("Men's and women's collections as two large photo cards with reference counts.", "Colecciones de hombre y dama como dos tarjetas grandes con el número de referencias."),
           caption: L("Men's and women's collections.", "Colecciones de hombre y dama."),
+        },
+        {
+          src: leonsProducts,
+          alt: L("Featured products: eight shoes photographed on identical beige cards, the output of the image pipeline.", "Productos destacados: ocho zapatos sobre tarjetas beige idénticas, resultado del pipeline de imágenes."),
+          caption: L("After the image pipeline: same card, same light.", "Después del pipeline de imágenes: misma tarjeta, misma luz."),
         },
       ],
     },
@@ -601,6 +572,10 @@ export const featured: FeaturedProject[] = [
     kind: L("Academic project", "Proyecto académico"),
     year: "2026",
     status: { tone: "academic", label: L("Academic · open source", "Académico · código abierto") },
+    tagline: L(
+      "Image batches processed in parallel by worker nodes over RabbitMQ, on five virtual machines.",
+      "Lotes de imágenes procesados en paralelo por nodos worker vía RabbitMQ, en cinco máquinas virtuales.",
+    ),
     summary: L(
       "Upload a batch, define global and per-image transformations, and a pool of worker nodes processes it in parallel through RabbitMQ — with PostgreSQL replication and shared storage across five virtual machines.",
       "Subes un lote, defines transformaciones globales y por imagen, y un grupo de nodos worker lo procesa en paralelo a través de RabbitMQ — con replicación de PostgreSQL y almacenamiento compartido entre cinco máquinas virtuales.",
@@ -624,53 +599,26 @@ export const featured: FeaturedProject[] = [
     links: {
       code: ["https://github.com/CratosCamilo/image-processing-system", "https://github.com/CratosCamilo/klin-frontend"],
     },
-    panels: [
-      {
-        ratio: "16 / 10",
-        mobileRatio: "16 / 11",
-        items: [
-          {
-            span: 12,
-            shot: {
-              src: kilnCover,
-              position: "center top",
-              alt: L(
-                "Kiln's batch builder: eight uploaded photos on the left and a stack of global transformations — resize, contrast, sharpen, watermark, convert — on the right.",
-                "Constructor de lotes de Kiln: ocho fotos cargadas a la izquierda y una pila de transformaciones globales — resize, contrast, sharpen, watermark, convert — a la derecha.",
-              ),
-            },
-          },
-        ],
-      },
-      {
-        ratio: "16 / 6",
-        mobileRatio: "4 / 3.2",
-        items: [
-          {
-            span: 7,
-            shot: {
-              src: kilnDone,
-              position: "left top",
-              alt: L(
-                "Batch detail after processing: 8 of 8 images completed, progress at 100% and a ZIP download button.",
-                "Detalle del lote después del proceso: 8 de 8 imágenes completadas, progreso al 100% y botón para descargar el ZIP.",
-              ),
-            },
-          },
-          {
-            span: 5,
-            shot: {
-              src: kilnDiagram,
-              position: "center 55%",
-              alt: L(
-                "UML deployment diagram: API server with RabbitMQ and storage, two worker nodes, a primary database and its read-only replica.",
-                "Diagrama de despliegue UML: servidor de API con RabbitMQ y almacenamiento, dos nodos worker, una base de datos primaria y su réplica de solo lectura.",
-              ),
-            },
-          },
-        ],
-      },
-    ],
+    showcase: {
+      layout: "duo",
+      shots: [
+        {
+          src: kilnCover,
+          device: "laptop",
+          alt: L(
+            "Kiln's batch builder: eight uploaded photos on the left and a stack of global transformations — resize, contrast, sharpen, watermark, convert — on the right.",
+            "Constructor de lotes de Kiln: ocho fotos cargadas a la izquierda y una pila de transformaciones globales — resize, contrast, sharpen, watermark, convert — a la derecha.",
+          ),
+        },
+        {
+          src: kilnDone,
+          alt: L(
+            "Batch detail after processing: 8 of 8 images completed, progress at 100% and a ZIP download button.",
+            "Detalle del lote después del proceso: 8 de 8 imágenes completadas, progreso al 100% y botón para descargar el ZIP.",
+          ),
+        },
+      ],
+    },
     story: {
       brief: [
         L(
@@ -730,6 +678,7 @@ export const featured: FeaturedProject[] = [
       gallery: [
         {
           src: kilnPerImage,
+          device: "laptop",
           alt: L("Per-image mode: one photo selected with its own rotate and grayscale steps and a JSON preview.", "Modo por imagen: una foto seleccionada con sus propios pasos de rotación y escala de grises y la vista previa del JSON."),
           caption: L("Per-image steps stack on top of the global ones.", "Los pasos por imagen se suman a los globales."),
         },
@@ -743,6 +692,11 @@ export const featured: FeaturedProject[] = [
           alt: L("Kiln's docs page: the 11 available transformations with their parameters, the recommended order and the API flow.", "Página de documentación de Kiln: las 11 transformaciones disponibles con sus parámetros, el orden recomendado y el flujo de la API."),
           caption: L("Docs rendered live from GET /info: transformations, order and flow.", "Documentación en vivo desde GET /info: transformaciones, orden y flujo."),
         },
+        {
+          src: kilnDiagram,
+          alt: L("UML deployment diagram: API server with RabbitMQ and storage, two worker nodes, a primary database and its read-only replica.", "Diagrama de despliegue UML: servidor de API con RabbitMQ y almacenamiento, dos nodos worker, una base de datos primaria y su réplica de solo lectura."),
+          caption: L("The deployment diagram from the project documentation.", "El diagrama de despliegue de la documentación del proyecto."),
+        },
       ],
     },
   },
@@ -754,6 +708,10 @@ export const featured: FeaturedProject[] = [
     kind: CLIENT_SYSTEM,
     year: "2026",
     status: { tone: "live", label: L("In production", "En producción") },
+    tagline: L(
+      "Real-time raw-material stock for a bread factory: entries, exits, counts, audit and branded reports.",
+      "Stock de materia prima en tiempo real para una panificadora: entradas, salidas, conteos, auditoría y reportes.",
+    ),
     summary: L(
       "Real-time stock across the factory's warehouses: purchase entries with VAT per line, validated exits, physical counts, voiding with automatic reversal, a full audit trail and branded Excel and PDF reports.",
       "Stock en tiempo real en las bodegas de la fábrica: entradas con IVA por línea, salidas validadas, conteos físicos, anulaciones con reversión automática, auditoría completa y reportes en Excel y PDF con la marca de la empresa.",
@@ -775,50 +733,27 @@ export const featured: FeaturedProject[] = [
     role: L("Sole developer", "Desarrollador único"),
     stack: ["Next.js 14", "React 18", "TypeScript", "Drizzle ORM", "Turso (libSQL)", "JWT (jose)", "CSS Modules", "jsPDF", "xlsx-js-style"],
     links: {},
-    panels: [
-      {
-        ratio: "16 / 9",
-        mobileRatio: "16 / 10",
-        items: [
-          {
-            span: 12,
-            shot: {
-              src: invCover,
-              position: "left top",
-              alt: L(
-                "Current-stock screen for the bakery warehouse: totals by state and a table of products with stock, minimum, difference and status.",
-                "Pantalla de stock actual de la bodega de panadería: totales por estado y una tabla de productos con stock, mínimo, diferencia y estado.",
-              ),
-            },
-          },
-        ],
-      },
-      {
-        ratio: "16 / 6.8",
-        mobileRatio: "4 / 3.4",
-        items: [
-          {
-            span: 7,
-            shot: {
-              src: invEntry,
-              position: "left top",
-              alt: L(
-                "Purchase-entry dialog in detailed mode: invoice number, supplier and product lines with quantity, unit and VAT.",
-                "Diálogo de entrada en modo detallado: número de factura, proveedor y líneas de producto con cantidad, unidad e IVA.",
-              ),
-            },
-          },
-          {
-            span: 5,
-            shot: {
-              src: invReport,
-              position: "center top",
-              alt: L("Report result with filters and export buttons for Excel and PDF.", "Resultado de un reporte con filtros y botones para exportar a Excel y PDF."),
-            },
-          },
-        ],
-      },
-    ],
+    showcase: {
+      layout: "duo",
+      shots: [
+        {
+          src: invCover,
+          device: "laptop",
+          position: "left top",
+          alt: L(
+            "Current-stock screen for the bakery warehouse: totals by state and a table of products with stock, minimum, difference and status.",
+            "Pantalla de stock actual de la bodega de panadería: totales por estado y una tabla de productos con stock, mínimo, diferencia y estado.",
+          ),
+        },
+        {
+          src: invEntry,
+          alt: L(
+            "Purchase-entry dialog in detailed mode: invoice number, supplier and product lines with quantity, unit and VAT.",
+            "Diálogo de entrada en modo detallado: número de factura, proveedor y líneas de producto con cantidad, unidad e IVA.",
+          ),
+        },
+      ],
+    },
     story: {
       brief: [
         L(
@@ -881,6 +816,7 @@ export const featured: FeaturedProject[] = [
       gallery: [
         {
           src: invSummary,
+          device: "laptop",
           alt: L("Summary dashboard of the warehouse.", "Resumen de la bodega."),
           caption: L("Warehouse summary.", "Resumen de la bodega."),
         },
@@ -891,6 +827,7 @@ export const featured: FeaturedProject[] = [
         },
         {
           src: invProducts,
+          device: "laptop",
           alt: L("Product list with category, units and conversion factor.", "Lista de productos con categoría, unidades y factor de conversión."),
           caption: L("Products with visual and base units.", "Productos con unidad visual y unidad base."),
         },
@@ -898,6 +835,11 @@ export const featured: FeaturedProject[] = [
           src: invPrintable,
           alt: L("Printable PDF with empty boxes to write the real stock by hand.", "PDF imprimible con casillas vacías para anotar el stock real a mano."),
           caption: L("A printable count sheet — for the days the tablet stays in the office.", "Un formato de conteo imprimible, para los días en que la tablet se queda en la oficina."),
+        },
+        {
+          src: invReport,
+          alt: L("Report result with filters and export buttons for Excel and PDF.", "Resultado de un reporte con filtros y botones para exportar a Excel y PDF."),
+          caption: L("A report with its filters, ready for Excel or PDF.", "Un reporte con sus filtros, listo para Excel o PDF."),
         },
       ],
     },
@@ -909,171 +851,184 @@ export const more: SideProject[] = [
     slug: "leons-planning",
     name: "Calzado Leons",
     title: L("Production planning — degree project", "Planeación de producción — trabajo de grado"),
-    summary: L(
-      "My degree project at UPB: orders, bills of materials versioned by size and color, inventory and direct-cost estimation for a shoe factory, with material requirements saved as snapshots.",
-      "Mi trabajo de grado en la UPB: pedidos, fórmulas de materiales versionadas por talla y color, inventario y estimación de costos directos para una fábrica de calzado, con requerimientos guardados como snapshots.",
-    ),
     kind: L("Degree project · in progress", "Trabajo de grado · en curso"),
     year: "2026",
     stack: ["Express", "TypeScript", "Prisma", "PostgreSQL", "React", "Vite", "Vitest"],
     links: {},
-    cover: {
-      src: planningCover,
-      position: "left top",
-      alt: L(
-        "Home screen in the dark theme: orders in progress by status, materials below minimum, latest inventory movements and variants still missing a formula.",
-        "Pantalla de inicio en tema oscuro: pedidos en curso por estado, insumos bajo mínimo, últimos movimientos de inventario y variantes que aún no tienen fórmula.",
-      ),
+    showcase: {
+      layout: "duo",
+      shots: [
+        {
+          src: planningCover,
+          device: "laptop",
+          position: "left top",
+          alt: L(
+            "Home screen in the dark theme: orders in progress by status, materials below minimum, latest inventory movements and variants still missing a formula.",
+            "Pantalla de inicio en tema oscuro: pedidos en curso por estado, insumos bajo mínimo, últimos movimientos de inventario y variantes que aún no tienen fórmula.",
+          ),
+        },
+        {
+          src: planningPhoneOrder,
+          device: "phone",
+          alt: L("An order on a phone: its status, pairs, delivery date and lines.", "Un pedido en el teléfono: su estado, pares, fecha de entrega y líneas."),
+        },
+      ],
     },
   },
   {
     slug: "groomers-house",
     name: "The Groomer's House",
     title: L("Premium grooming salon", "Peluquería canina premium"),
-    summary: L(
-      "A dog-grooming salon in Floridablanca: dark-and-gold art direction, a before/after slider and booking through WhatsApp.",
-      "Una peluquería canina en Floridablanca: dirección de arte en negro y dorado, comparador antes/después y agendamiento por WhatsApp.",
-    ),
     kind: CLIENT_SITE,
     year: "2026",
     stack: ["HTML", "CSS", "JavaScript", "Vercel"],
     links: { live: "https://the-groomers-house.vercel.app", code: "https://github.com/CratosCamilo/the-groomers-house" },
-    cover: {
-      src: groomersCover,
-      position: "center",
-      alt: L(
-        "The Groomer's House home page: a golden retriever in front of a neon sign with the headline “Peluquería canina en Floridablanca”.",
-        "Inicio de The Groomer's House: un golden retriever frente a un letrero de neón con el titular «Peluquería canina en Floridablanca».",
-      ),
+    showcase: {
+      layout: "duo",
+      shots: [
+        {
+          src: groomersCover,
+          device: "laptop",
+          position: "center",
+          alt: L(
+            "The Groomer's House home page: a golden retriever in front of a neon sign with the headline “Peluquería canina en Floridablanca”.",
+            "Inicio de The Groomer's House: un golden retriever frente a un letrero de neón con el titular «Peluquería canina en Floridablanca».",
+          ),
+        },
+        {
+          src: groomersMobile,
+          device: "phone",
+          alt: L("The same hero on a phone.", "El mismo inicio en un teléfono."),
+        },
+      ],
     },
-
   },
   {
     slug: "louloz-inventory",
     name: "Louloz Inventario",
     title: L("Size-by-size stock for a footwear brand", "Stock talla por talla para una marca de calzado"),
-    summary: L(
-      "The stock tool of a Colombian footwear brand: every reference read size by size, filters by line, gender and availability, three ways to name the products, and editing behind a PIN — in light and dark.",
-      "La herramienta de stock de una marca colombiana de calzado: cada referencia leída talla por talla, filtros por línea, género y disponibilidad, tres formas de nombrar los productos y edición protegida por PIN, en claro y oscuro.",
-    ),
     kind: CLIENT_SYSTEM,
     year: "2026",
     stack: ["Next.js 16", "Tailwind v4", "Drizzle", "Turso"],
     links: { live: "https://louloz-inventario.vercel.app" },
-    cover: {
-      src: loulozList,
-      position: "center top",
-      alt: L(
-        "Inventory list on a phone: each reference with its total pairs and a row of size chips, empty sizes drawn dashed.",
-        "Lista de inventario en un teléfono: cada referencia con su total de pares y una fila de tallas, con las tallas vacías punteadas.",
-      ),
+    showcase: {
+      layout: "phones",
+      shots: [
+        {
+          src: loulozFilters,
+          device: "phone",
+          position: "center bottom",
+          alt: L("Filters sheet with line, gender, stock level and the naming mode.", "Panel de filtros con línea, género, nivel de stock y la forma de nombrar."),
+        },
+        {
+          src: loulozList,
+          device: "phone",
+          alt: L(
+            "Inventory list on a phone: each reference with its total pairs and a row of size chips, empty sizes drawn dashed.",
+            "Lista de inventario en un teléfono: cada referencia con su total de pares y una fila de tallas, con las tallas vacías punteadas.",
+          ),
+        },
+        {
+          src: loulozSizes,
+          device: "phone",
+          alt: L("A reference expanded in the dark theme, with the pairs of each size as large tiles.", "Una referencia desplegada en tema oscuro, con los pares de cada talla en fichas grandes."),
+        },
+      ],
     },
-    layout: "phones",
-    extra: [
-      {
-        src: loulozFilters,
-        position: "center bottom",
-        alt: L("Filters sheet with line, gender, stock level and the naming mode.", "Panel de filtros con línea, género, nivel de stock y la forma de nombrar."),
-      },
-      {
-        src: loulozSizes,
-        position: "center top",
-        alt: L("A reference expanded in the dark theme, with the pairs of each size as large tiles.", "Una referencia desplegada en tema oscuro, con los pares de cada talla en fichas grandes."),
-      },
-    ],
   },
   {
     slug: "impostor",
     name: "Impostor",
     title: L("Real-time party game", "Juego multijugador en tiempo real"),
-    summary: L(
-      "A social-deduction card game for friends: rooms with six-character codes, secret roles, topics and timed votes, synced over WebSockets.",
-      "Un juego de deducción social para jugar con amigos: salas con código de seis caracteres, roles secretos, temas y votaciones con tiempo, sincronizado por WebSockets.",
-    ),
     kind: L("Personal project", "Proyecto personal"),
     year: "2025",
     stack: ["React 19", "TypeScript", "Socket.IO", "Express 5", "Vite"],
     links: { live: "https://impostor-client-zeta.vercel.app", code: "https://github.com/CratosCamilo/impostor-client" },
-    cover: {
-      src: impostorCover,
-      position: "center top",
-      alt: L(
-        "An open vote seen by the impostor: their secret card, the five players in the room and a countdown to choose who to eject.",
-        "Una votación abierta vista por el impostor: su carta secreta, los cinco jugadores de la sala y la cuenta regresiva para elegir a quién expulsar.",
-      ),
+    showcase: {
+      layout: "solo",
+      shots: [
+        {
+          src: impostorTablet,
+          device: "tablet",
+          alt: L(
+            "An open vote seen by the impostor: their secret card, the five players in the room and a countdown to choose who to eject.",
+            "Una votación abierta vista por el impostor: su carta secreta, los cinco jugadores de la sala y la cuenta regresiva para elegir a quién expulsar.",
+          ),
+        },
+      ],
     },
   },
   {
     slug: "myprogress",
     name: "MyProgress",
     title: L("Gym-tracking PWA", "PWA para el gimnasio"),
-    summary: L(
-      "An installable gym tracker built to feel native on iPhone: streak calendar, flexible sets, routines, body-weight trend and stats, with real accounts and email verification.",
-      "Un tracker de gimnasio instalable que se siente nativo en iPhone: calendario de racha, series flexibles, rutinas, tendencia de peso y estadísticas, con cuentas reales y verificación por correo.",
-    ),
     kind: L("Personal project · in use", "Proyecto personal · en uso"),
     year: "2026",
     stack: ["Next.js 14", "Drizzle", "Turso", "TanStack Query", "Recharts", "Framer Motion", "Resend"],
     links: { live: "https://my-progress-l65q.vercel.app" },
-    cover: {
-      src: progressDashboard,
-      position: "center top",
-      alt: L("Dashboard with the weekly goal and a monthly calendar marking training days.", "Panel con la meta semanal y un calendario mensual que marca los días entrenados."),
+    showcase: {
+      layout: "phones",
+      shots: [
+        {
+          src: progressStats,
+          device: "phone",
+          alt: L("Stats screen with totals and a bar chart of workouts per week.", "Pantalla de estadísticas con totales y gráfico de barras de entrenos por semana."),
+        },
+        {
+          src: progressDashboard,
+          device: "phone",
+          alt: L("Dashboard with the weekly goal and a monthly calendar marking training days.", "Panel con la meta semanal y un calendario mensual que marca los días entrenados."),
+        },
+        {
+          src: progressWeight,
+          device: "phone",
+          alt: L("Body-weight screen with a line chart trending down over two months.", "Pantalla de peso corporal con una línea que baja a lo largo de dos meses."),
+        },
+      ],
     },
-    layout: "phones",
-    extra: [
-      {
-        src: progressStats,
-        position: "center top",
-        alt: L("Stats screen with totals and a bar chart of workouts per week.", "Pantalla de estadísticas con totales y gráfico de barras de entrenos por semana."),
-      },
-      {
-        src: progressWeight,
-        position: "center top",
-        alt: L("Body-weight screen with a line chart trending down over two months.", "Pantalla de peso corporal con una línea que baja a lo largo de dos meses."),
-      },
-    ],
   },
   {
     slug: "preflop-viewer",
     name: "Preflop Viewer",
     title: L("Tournament poker ranges", "Rangos de póker de torneo"),
-    summary: L(
-      "Preflop ranges for tournament play by position, stack depth and spot — a 169-hand grid with mixed-strategy frequencies.",
-      "Rangos preflop para torneos por posición, profundidad de stack y situación — una grilla de 169 manos con frecuencias de estrategia mixta.",
-    ),
     kind: L("Personal project", "Proyecto personal"),
     year: "2026",
     stack: ["React 19", "Vite"],
     links: { live: "https://poker-viewer-kmi.vercel.app" },
-    cover: {
-      src: preflopCover,
-      position: "center top",
-      alt: L(
-        "Small-blind open-raise range at 15 big blinds: a 13-by-13 hand grid colored by call and raise frequencies.",
-        "Rango de open raise desde la ciega pequeña con 15 ciegas: una grilla de 13 por 13 manos coloreada según frecuencias de call y raise.",
-      ),
+    showcase: {
+      layout: "solo",
+      shots: [
+        {
+          src: preflopPhone,
+          device: "phone",
+          alt: L(
+            "Small-blind open-raise range at 15 big blinds on a phone: a 13-by-13 hand grid colored by call and raise frequencies.",
+            "Rango de open raise desde la ciega pequeña con 15 ciegas en un teléfono: una grilla de 13 por 13 manos coloreada según frecuencias de call y raise.",
+          ),
+        },
+      ],
     },
   },
   {
     slug: "reconciliation-automations",
     name: "Conciliaciones",
     title: L("Bookkeeping automations", "Automatizaciones contables"),
-    summary: L(
-      "Seven Python tools for a food business's bookkeeping: they cross DIAN e-invoices, Siigo ledgers and bank statements and hand back a clean Excel file.",
-      "Siete herramientas en Python para la contabilidad de un negocio de alimentos: cruzan facturas electrónicas de la DIAN, libros de Siigo y extractos bancarios y devuelven un Excel limpio.",
-    ),
     kind: CLIENT_SYSTEM,
     year: "2026",
     stack: ["Next.js", "Python", "pandas", "openpyxl", "Vercel Functions"],
     links: {},
-    cover: {
-      src: reconCover,
-      position: "center top",
-      alt: L(
-        "Grid of automation modules: DIAN vs Siigo, weekly banks, Davivienda fortnightly, savings account, monthly bank statement, DIAN vs inventory and costing.",
-        "Grilla de módulos de automatización: DIAN vs Siigo, bancos semanal, Davivienda quincenal, cuenta de ahorros, extracto mensual, DIAN vs inventario y costeo.",
-      ),
+    showcase: {
+      layout: "solo",
+      shots: [
+        {
+          src: reconCover,
+          device: "tablet",
+          alt: L(
+            "Grid of automation modules: DIAN vs Siigo, weekly banks, Davivienda fortnightly, savings account, monthly bank statement, DIAN vs inventory and costing.",
+            "Grilla de módulos de automatización: DIAN vs Siigo, bancos semanal, Davivienda quincenal, cuenta de ahorros, extracto mensual, DIAN vs inventario y costeo.",
+          ),
+        },
+      ],
     },
   },
 ];

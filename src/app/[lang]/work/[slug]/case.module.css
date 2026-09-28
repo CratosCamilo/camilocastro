@@ -68,6 +68,40 @@
   letter-spacing: -0.01em;
 }
 
+.introText {
+  display: grid;
+  gap: 20px;
+}
+
+.highlights {
+  display: grid;
+  padding: 0;
+  list-style: none;
+  font-size: 0.9875rem;
+  line-height: 1.5;
+  color: var(--ink-2);
+}
+
+.highlights li {
+  position: relative;
+  padding: 10px 0 10px 22px;
+  border-top: 1px solid var(--rule);
+}
+
+.highlights li:last-child {
+  border-bottom: 1px solid var(--rule);
+}
+
+.highlights li::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 1.05em;
+  width: 8px;
+  height: 8px;
+  background: var(--accent);
+}
+
 .meta {
   display: grid;
   margin: 0;
@@ -103,10 +137,15 @@
   padding-top: 6px;
 }
 
-/* ---- hero panels ---- */
+/* ---- hero showcase ---- */
 
 .hero {
   margin-top: clamp(36px, 5vw, 64px);
+}
+
+.showcase {
+  max-width: 1180px;
+  margin-inline: auto;
 }
 
 /* ---- sections ---- */
@@ -244,31 +283,43 @@
 .gallery {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(20px, 2.4vw, 32px) var(--panel-gap);
-  align-items: start;
+  --gallery-gap: clamp(24px, 3vw, 44px);
+  gap: clamp(36px, 4vw, 56px) var(--gallery-gap);
+  align-items: end;
 }
 
 .figure {
   display: grid;
-  gap: 10px;
+  gap: 14px;
+  justify-items: center;
+}
+
+.figure > :first-child {
+  width: 100%;
+}
+
+/* phones and tablets keep a device-like size instead of filling the column */
+.figure[data-kind="phone"] > :first-child {
+  width: min(62%, 280px);
+}
+
+.figure[data-kind="tablet"] > :first-child {
+  width: 94%;
 }
 
 .figure:first-child {
   grid-column: 1 / -1;
 }
 
-.frame {
-  border: var(--border) solid var(--line);
-  background: var(--paper-2);
-  overflow: hidden;
-}
-
-.frame img {
-  width: 100%;
-  height: auto;
+/* a shot left alone on the last row sits centered at column width */
+.figure:last-child:nth-child(even) {
+  grid-column: 1 / -1;
+  width: calc(50% - var(--gallery-gap) / 2);
+  justify-self: center;
 }
 
 .caption {
+  justify-self: stretch;
   color: var(--ink-3);
   text-transform: none;
   letter-spacing: 0.02em;
@@ -369,5 +420,9 @@
   .meta > div {
     grid-template-columns: minmax(0, 1fr);
     gap: 4px;
+  }
+
+  .figure:last-child:nth-child(even) {
+    width: 100%;
   }
 }

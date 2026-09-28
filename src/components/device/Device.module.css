@@ -1,0 +1,200 @@
+/* Devices are drawn like the rest of the site: flat ink, one line weight,
+   and a screentone shadow instead of a soft drop shadow. All measures are in
+   container units, so a device looks the same at any size. */
+
+.device {
+  position: relative;
+  isolation: isolate;
+  container-type: inline-size;
+  --dev-line: 2px;
+}
+
+/* screentone shadow, offset down and right */
+.device::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 6cqw -3.2cqw -3.6cqw 6cqw;
+  border-radius: 6cqw;
+  background-image: radial-gradient(circle at center, var(--tone) 1.1px, transparent 1.45px);
+  background-size: 6px 6px;
+  -webkit-mask-image: radial-gradient(ellipse at 60% 60%, #000 30%, transparent 78%);
+  mask-image: radial-gradient(ellipse at 60% 60%, #000 30%, transparent 78%);
+}
+
+.body {
+  position: relative;
+  background: var(--dev-bezel);
+  box-shadow: 0 0 0 var(--dev-line) var(--dev-edge);
+}
+
+.screen {
+  position: relative;
+  overflow: hidden;
+  background: #0b0b0a;
+}
+
+.img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--pos);
+}
+
+/* ---- laptop ---- */
+
+.device[data-kind="laptop"] .body {
+  margin: 0 7.5%;
+  padding: 2.1cqw 2.1cqw 2.5cqw;
+  border-radius: 2.6cqw 2.6cqw 0.9cqw 0.9cqw;
+}
+
+.device[data-kind="laptop"] .body::before {
+  content: "";
+  position: absolute;
+  top: 0.75cqw;
+  left: 50%;
+  width: 0.65cqw;
+  height: 0.65cqw;
+  border-radius: 50%;
+  background: var(--dev-camera);
+  transform: translateX(-50%);
+}
+
+.device[data-kind="laptop"] .screen {
+  aspect-ratio: 16 / 10;
+  border-radius: 0.5cqw;
+}
+
+.base {
+  position: relative;
+  height: 2.5cqw;
+  background: var(--dev-base);
+  box-shadow: 0 0 0 var(--dev-line) var(--dev-edge);
+  border-radius: 0.3cqw 0.3cqw 2.4cqw 2.4cqw / 0.3cqw 0.3cqw 2cqw 2cqw;
+}
+
+.base::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 15%;
+  height: 0.9cqw;
+  border-radius: 0 0 1cqw 1cqw;
+  background: var(--dev-notch);
+  transform: translateX(-50%);
+}
+
+/* ---- phone ---- */
+
+.device[data-kind="phone"] .body {
+  padding: 7cqw 3.4cqw 3.4cqw;
+  border-radius: 13cqw;
+}
+
+/* speaker in the top bezel: nothing covers the screenshot */
+.device[data-kind="phone"] .body::before {
+  content: "";
+  position: absolute;
+  top: 2.6cqw;
+  left: 50%;
+  width: 20cqw;
+  height: 2cqw;
+  border-radius: 99px;
+  background: var(--dev-camera);
+  transform: translateX(-50%);
+}
+
+/* side button */
+.device[data-kind="phone"] .body::after {
+  content: "";
+  position: absolute;
+  top: 22%;
+  right: calc(-1.4cqw - var(--dev-line));
+  width: 1.4cqw;
+  height: 11%;
+  border-radius: 0 1cqw 1cqw 0;
+  background: var(--dev-bezel);
+  box-shadow: 0 0 0 var(--dev-line) var(--dev-edge);
+  z-index: -1;
+}
+
+.device[data-kind="phone"] .screen {
+  aspect-ratio: 390 / 844;
+  border-radius: 9.6cqw;
+}
+
+/* ---- tablet ---- */
+
+.device[data-kind="tablet"] .body {
+  padding: 3.4cqw;
+  border-radius: 4.8cqw;
+}
+
+.device[data-kind="tablet"] .body::before {
+  content: "";
+  position: absolute;
+  top: 1.25cqw;
+  left: 50%;
+  width: 0.9cqw;
+  height: 0.9cqw;
+  border-radius: 50%;
+  background: var(--dev-camera);
+  transform: translateX(-50%);
+}
+
+.device[data-kind="tablet"] .screen {
+  aspect-ratio: 4 / 3;
+  border-radius: 1.6cqw;
+}
+
+.device[data-kind="tablet"][data-orient="portrait"] .screen {
+  aspect-ratio: 3 / 4;
+}
+
+/* ---- browser window (for crops of a page) ---- */
+
+.device[data-kind="browser"] .body {
+  overflow: hidden;
+  border-radius: 1.4cqw;
+  background: var(--paper);
+}
+
+.device[data-kind="browser"] .screen {
+  aspect-ratio: var(--ratio);
+  background: var(--paper-2);
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  gap: 1.1cqw;
+  height: max(22px, 4.2cqw);
+  padding: 0 max(10px, 1.8cqw);
+  background: var(--dev-bar);
+  border-bottom: var(--dev-line) solid var(--dev-edge);
+}
+
+.bar i {
+  width: max(8px, 1.3cqw);
+  height: max(8px, 1.3cqw);
+  border-radius: 50%;
+  border: 1.5px solid var(--ink);
+}
+
+.bar i:first-child {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.bar span {
+  flex: 0 1 46%;
+  height: max(10px, 2.1cqw);
+  margin-left: 2cqw;
+  border-radius: 99px;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+}

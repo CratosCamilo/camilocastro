@@ -20,7 +20,7 @@ export default async function Image({ params }: { params: Promise<{ lang: string
   const index = featured.indexOf(project) + 1;
   const cover = await readFile(join(process.cwd(), "assets", "og", `${project.slug}.jpg`));
   const src = `data:image/jpeg;base64,${cover.toString("base64")}`;
-  const focus = project.panels[0].items[0].shot.position ?? "center";
+  const focus = project.showcase.shots[0].position ?? "center";
 
   return new ImageResponse(
     (

@@ -1,4 +1,3 @@
-import type { CSSProperties } from "react";
 import type { Dictionary } from "@/i18n/dictionaries";
 import { Chapter } from "@/components/Chapter";
 import { Seal } from "@/components/Seal";
@@ -30,12 +29,7 @@ export function About({ dict }: { dict: Dictionary }) {
 
           <div className={styles.main}>
             {a.paragraphs.map((p, i) => (
-              <p
-                key={i}
-                className={i === 0 ? styles.first : styles.paragraph}
-                data-reveal
-                style={{ "--delay": `${i * 60}ms` } as CSSProperties}
-              >
+              <p key={i} className={styles.first} data-reveal>
                 {p}
               </p>
             ))}

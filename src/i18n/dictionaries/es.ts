@@ -33,11 +33,7 @@ export const es = {
     line1: "Camilo",
     line2: "Castro",
     lede: "Construyo software que llega a producción — desde sitios web para negocios locales hasta el motor de nómina de una panificadora.",
-    facts: [
-      { term: "Ahora", detail: "Último semestre de Ingeniería de Sistemas e Informática en la UPB" },
-      { term: "Disponible para", detail: "Roles de ingeniería de tiempo completo y proyectos freelance" },
-      { term: "Trabajo con", detail: "TypeScript, React, Next.js, Node.js, Python" },
-    ],
+    available: "Disponible para roles de tiempo completo y freelance",
     ctaWork: "Ver el trabajo",
     ctaContact: "Escríbeme",
     mottoLabel: "Lema: 戦え, tatakae — «pelea»",
@@ -67,6 +63,7 @@ export const es = {
     label: "Capítulo 01 — anexo",
     title: "También construí",
     lede: "Proyectos más pequeños o anteriores, para que quede el registro.",
+    toggle: "Ver todos",
     year: "Año",
     project: "Proyecto",
     what: "Qué es",
@@ -79,22 +76,18 @@ export const es = {
     areas: [
       {
         title: "Sistemas de negocio",
-        body: "Software de inventario, nómina, contabilidad y operación para empresas que ya superaron las hojas de cálculo o un ERP heredado. Roles, auditoría y exportaciones que la gente de verdad usa.",
         tags: ["Nómina colombiana y DIAN", "Acceso por roles", "Auditoría", "Salidas en Excel y PDF"],
       },
       {
         title: "Sitios que venden",
-        body: "Landings y catálogos con identidad para negocios locales: rápidos, pensados primero para móvil, listos para buscadores y construidos alrededor del canal que los clientes ya usan: WhatsApp.",
         tags: ["Dirección de arte", "Rendimiento", "SEO", "Flujos por WhatsApp"],
       },
       {
         title: "Tiempo real y distribuidos",
-        body: "Salas por WebSocket, colas de mensajes y grupos de workers — con replicación y manejo de fallos cuando una sola máquina no alcanza.",
         tags: ["Socket.IO", "RabbitMQ", "Pools de workers", "Replicación de PostgreSQL"],
       },
       {
         title: "Automatización y datos",
-        body: "Python que elimina trabajo repetitivo: conciliar archivos de la DIAN, libros contables y extractos bancarios, procesar imágenes y generar los reportes que alguien armaba a mano.",
         tags: ["pandas y openpyxl", "rembg y Pillow", "Python serverless", "Scrapers"],
       },
     ],
@@ -107,30 +100,12 @@ export const es = {
       { group: "Infraestructura", items: ["Docker", "Vercel", "Cloudflare Pages y R2", "GitHub Actions", "RabbitMQ", "Redis"] },
       { group: "Pruebas", items: ["pytest", "Vitest", "Playwright", "Jest", "Supertest"] },
     ],
-    processTitle: "Cómo trabajo",
-    process: [
-      {
-        title: "Entender el negocio",
-        body: "Entrevistas, cuestionarios y los documentos que produce el sistema anterior. En el proyecto de nómina eso significó hacerle ingeniería inversa a Siesa antes de escribir una línea de código.",
-      },
-      {
-        title: "Dejarlo por escrito",
-        body: "Reglas de negocio, decisiones de arquitectura, guía de marca y un registro de avance vivo en cada repositorio, para que cualquiera — incluso yo dentro de seis meses — pueda retomarlo.",
-      },
-      {
-        title: "Publicar y luego endurecer",
-        body: "Desplegar temprano, poner pruebas y CI donde los errores cuestan, y mantener cerca a quienes lo usan.",
-      },
-    ],
   },
   about: {
     title: "Sobre mí",
     pull: "En la parte meticulosa es donde se gana la confianza.",
     paragraphs: [
-      "Soy Camilo Castro, desarrollador full-stack de Bucaramanga, Colombia. Estoy terminando Ingeniería de Sistemas e Informática en la Universidad Pontificia Bolivariana y me gradúo a finales de 2026.",
-      "Casi todo lo que construyo mueve negocios reales en Santander y en la costa Caribe: el inventario de una panificadora y su próximo sistema de nómina, el catálogo y la planeación de producción de una fábrica de calzado, un hotel, una peluquería canina, un jardín infantil. Trabajo directamente con quienes lo usan, desde la primera entrevista hasta el despliegue.",
-      "Disfruto los dos extremos del oficio: la parte meticulosa — hacerle ingeniería inversa a un ERP, dejar cada regla por escrito, reproducir un mes de nómina de punta a punta — y la parte visible: tipografía, movimiento y páginas que cargan rápido.",
-      "Cuando construyo para mí es porque quiero la herramienta: un visor de rangos preflop para póker de torneo, un tracker de gimnasio, un juego para jugar con amigos. Esos los firmo como Kmi.",
+      "Soy desarrollador full-stack de Bucaramanga, Colombia, y termino Ingeniería de Sistemas e Informática en la UPB (grado a finales de 2026). Casi todo lo que construyo mueve negocios reales, y trabajo con quienes lo usan, desde la primera entrevista hasta el despliegue.",
     ],
     motto: {
       word: "戦え",
